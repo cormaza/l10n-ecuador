@@ -1,0 +1,6 @@
+# generated from manifests external_dependencies
+pyOpenSSL
+python-stdnum
+xades
+xmlsig
+zeep
