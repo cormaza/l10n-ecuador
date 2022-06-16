@@ -448,7 +448,7 @@ class AccountMove(models.Model):
             )
 
     @api.depends(
-        "type",
+        "move_type",
         "l10n_ec_point_of_emission_id",
         "l10n_latam_document_type_id",
     )
@@ -526,7 +526,7 @@ class AccountMove(models.Model):
         remaining.l10n_ec_document_number = False
 
     @api.depends(
-        "type",
+        "move_type",
         "partner_id",
         "l10n_latam_document_type_id",
         "l10n_ec_type_emission",
@@ -643,7 +643,7 @@ class AccountMove(models.Model):
             rec.l10n_ec_withhold_ids = l10n_ec_withhold_ids
             rec.l10n_ec_withhold_count = len(l10n_ec_withhold_ids)
 
-    @api.depends("type", "line_ids.tax_ids")
+    @api.depends("move_type", "line_ids.tax_ids")
     def _compute_l10n_ec_withhold_required(self):
         group_iva_withhold = self.env.ref("l10n_ec_niif.tax_group_iva_withhold")
         group_rent_withhold = self.env.ref("l10n_ec_niif.tax_group_renta_withhold")
@@ -713,7 +713,7 @@ class AccountMove(models.Model):
         "name",
         "l10n_ec_document_number",
         "company_id",
-        "type",
+        "move_type",
         "l10n_latam_document_type_id",
     )
     def _check_l10n_ec_document_number_duplicity(self):
@@ -1107,7 +1107,7 @@ class AccountMove(models.Model):
         return res
 
     @api.onchange(
-        "type",
+        "move_type",
         "l10n_latam_document_type_id",
         "l10n_ec_point_of_emission_id",
         "invoice_date",
@@ -1246,7 +1246,7 @@ class AccountMove(models.Model):
     @api.model
     def default_get(self, fields):
         values = super(AccountMove, self).default_get(fields)
-        inv_type = values.get("type", self.move_type)
+        inv_type = values.get("move_type", self.move_type)
         internal_type = (
             values.get("internal_type")
             or self.env.context.get("internal_type")
@@ -1314,7 +1314,7 @@ class AccountMove(models.Model):
         res = super(AccountMove, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu
         )
-        inv_type = self.env.context.get("type", "out_invoice")
+        inv_type = self.env.context.get("move_type", "out_invoice")
         if (
             view_type == "form"
             and inv_type == "out_invoice"

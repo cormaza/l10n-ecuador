@@ -138,36 +138,35 @@
                                     <field
                                         name="invoice_out_id"
                                         attrs="{'invisible': [('invoice_out_id', '=', False)]}"
-                                        domain="[('l10n_latam_internal_type','=', 'invoice'),('type','=','out_invoice'),('state', '=', 'posted')]"
+                                        domain="[('l10n_latam_internal_type','=', 'invoice'),('move_type','=','out_invoice'),('state', '=', 'posted')]"
                                         context="{'form_view_ref':'account.view_move_form', 'type':'out_invoice', 'journal_type': 'sale'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
                                         name="credit_note_out_id"
                                         attrs="{'invisible': [('credit_note_out_id', '=', False)]}"
-                                        domain="[('type','=','out_refund'), ('state', '=', 'posted')]"
+                                        domain="[('move_type','=','out_refund'), ('state', '=', 'posted')]"
                                         context="{'form_view_ref':'account.view_move_form', 'type':'out_refund', 'journal_type':'sale_refund'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
                                         name="debit_note_out_id"
                                         attrs="{'invisible': [('debit_note_out_id', '=', False)]}"
-                                        domain="[('l10n_latam_internal_type','=', 'debit_note'),('type','=','out_invoice'), ('state', '=', 'posted')]"
+                                        domain="[('l10n_latam_internal_type','=', 'debit_note'),('move_type','=','out_invoice'), ('state', '=', 'posted')]"
                                         context="{'form_view_ref':'account.view_move_form', 'type':'out_invoice', 'journal_type': 'sale', 'internal_type': 'debit_note'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
                                         name="liquidation_id"
                                         attrs="{'invisible': [('liquidation_id', '=', False)]}"
-                                        domain="[('l10n_latam_internal_type','=', 'liquidation'), ('type','=','in_invoice'), ('state', '=', 'posted')]"
+                                        domain="[('l10n_latam_internal_type','=', 'liquidation'), ('move_type','=','in_invoice'), ('state', '=', 'posted')]"
                                         context="{'form_view_ref':'account.view_move_form', 'type':'in_invoice', 'journal_type': 'purchase','internal_type': 'liquidation'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
                                         name="withhold_id"
                                         attrs="{'invisible': [('withhold_id', '=', False)]}"
-                                        domain="[('state','=','approved'), ('type','=','purchase')]"
-                                        context="{'form_view_ref':'ecua_retenciones.view_account_retention_purchase_form'}"
+                                        domain="[('state','=','done'), ('type','=','purchase')]"
                                         options="{'no_create': True}"
                                     />
                                     <field name="date_emision_document" />
@@ -259,9 +258,9 @@
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers" />
-                    <field name="activity_ids" widget="mail_activity" />
-                    <field name="message_ids" widget="mail_thread" />
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
                 </div>
             </form>
         </field>

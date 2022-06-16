@@ -12,7 +12,6 @@
         "base_vat",
         "l10n_latam_base",
         "l10n_latam_invoice_document",
-        "account_accountant",
         "account_debit_note",
         "portal",
         "mail",
@@ -78,16 +77,29 @@
         "views/l10n_ec_portal_common_electronic_templates.xml",
         "views/l10n_ec_portal_withhold_templates.xml",
         "views/res_config_view.xml",
-        "views/assets.xml",
     ],
     "demo": [
         "demo/agency_data.xml",
         "demo/partner_data.xml",
     ],
+    "assets": {
+        "web.report_assets_common": [
+            "l10n_ec_niif/static/src/scss/*",
+        ],
+        "web.assets_frontend": [
+            "l10n_ec_niif/static/src/js/l10n_ec_portal_electronic_sidebar.js",
+        ],
+    },
     "installable": True,
     "auto_install": False,
     "external_dependencies": {
-        "python": ["stdnum", "xmlsig", "OpenSSL", "xades", "zeep"],
+        "python": [
+            "stdnum",
+            "xmlsig",
+            "OpenSSL",
+            "xades",
+            "zeep",
+        ],
     },
-    "post_init_hook": "update_payment_term_type",
+    "post_init_hook": "post_init_hook",
 }

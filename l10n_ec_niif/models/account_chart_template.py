@@ -12,26 +12,18 @@ class AccountChartTemplate(models.Model):
         return res
 
     def _prepare_all_journals(self, acc_template_ref, company, journals_dict=None):
-        def _get_default_account(journal_vals, account_type="debit"):
+        def _get_default_account(journal_vals, type="debit"):
             # Get the default accounts
             default_account = False
             if journal["type"] == "sale":
                 default_account = acc_template_ref.get(
-                    self.property_account_income_categ_id.id
-                )
+                    self.property_account_income_categ_id
+                ).id
             elif journal["type"] == "purchase":
                 default_account = acc_template_ref.get(
-                    self.property_account_expense_categ_id.id
-                )
-            elif journal["type"] == "general" and journal["code"] == _("EXCH"):
-                if account_type == "credit":
-                    default_account = acc_template_ref.get(
-                        self.income_currency_exchange_account_id.id
-                    )
-                else:
-                    default_account = acc_template_ref.get(
-                        self.expense_currency_exchange_account_id.id
-                    )
+                    self.property_account_expense_categ_id
+                ).id
+
             return default_account
 
         journal_data = super(AccountChartTemplate, self)._prepare_all_journals(
@@ -95,10 +87,7 @@ class AccountChartTemplate(models.Model):
                     "name": journal["name"],
                     "code": journal["code"],
                     "company_id": company.id,
-                    "default_credit_account_id": _get_default_account(
-                        journal, "credit"
-                    ),
-                    "default_debit_account_id": _get_default_account(journal, "debit"),
+                    "default_account_id": _get_default_account(journal),
                     "show_on_dashboard": journal["favorite"],
                     "color": journal.get("color", False),
                     "sequence": journal["sequence"],

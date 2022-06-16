@@ -41,7 +41,7 @@
                             <field
                             name="address_id"
                             domain="[('parent_id', '=', partner_id)]"
-                            context="{'default_parent_id': partner_id, 'default_type': 'invoice', 'form_view_ref': 'base.view_partner_short_form'}"
+                            context="{'default_parent_id': partner_id, 'default_type': 'invoice', 'form_view_ref': 'base.view_partner_simple_form'}"
                         />
                             <field name="count_invoice" invisible="1" />
                             <field name="partner_id" invisible="1" />

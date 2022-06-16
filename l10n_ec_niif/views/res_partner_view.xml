@@ -118,9 +118,9 @@
         <record model="ir.ui.view" id="res_partner_short_form_view">
             <field name="name">res.partner.form</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_short_form" />
+            <field name="inherit_id" ref="base.view_partner_simple_form" />
             <field name="arch" type="xml">
-                <xpath expr="/form/sheet//group[last()]" position="after">
+                <xpath expr="/form//group[last()]" position="after">
                     <group colspan="4" string="Notificación de Documentos Electrónicos">
                         <group>
                             <field name="l10n_ec_email_out_invoice" />
