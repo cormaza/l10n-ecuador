@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-        <record id="sub_company" model="res.company">
-            <field name="name">Your Other Company</field>
-        </record>
         <record model="l10n_ec.agency" id="demo_other_agency">
             <field name="name">Other Demo Agency</field>
             <field name="number">501</field>
-            <field name="address_id" ref="base.main_partner" />
-            <field name="company_id" ref="sub_company" />
+            <field name="address_id" ref="partner_demo_company_ec" />
+            <field name="company_id" ref="demo_company_ec" />
             <field
             name="user_ids"
             eval="[(6, 0, [ref('base.default_user'), ref('base.user_admin'), ref('base.user_root')])]"

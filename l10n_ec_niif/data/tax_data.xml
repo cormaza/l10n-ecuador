@@ -3,42 +3,52 @@
 
         <record id="tax_group_iva_no_apply" model="account.tax.group">
             <field name="name">No Aplica I.V.A.</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_iva_exempt" model="account.tax.group">
             <field name="name">I.V.A. Exento</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_iva_0" model="account.tax.group">
             <field name="name">I.V.A. 0%</field>
             <field name="l10n_ec_xml_fe_code">2</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_iva" model="account.tax.group">
             <field name="name">I.V.A. 12%</field>
             <field name="l10n_ec_xml_fe_code">2</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_iva_withhold" model="account.tax.group">
             <field name="name">Retención I.V.A.</field>
             <field name="l10n_ec_xml_fe_code">2</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_renta_withhold" model="account.tax.group">
             <field name="name">Retención I.R.</field>
             <field name="l10n_ec_xml_fe_code">1</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_ice" model="account.tax.group">
             <field name="name">I.C.E.</field>
             <field name="l10n_ec_xml_fe_code">3</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_irbpnr" model="account.tax.group">
             <field name="name">IRBPNR</field>
             <field name="l10n_ec_xml_fe_code">5</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_isd" model="account.tax.group">
             <field name="name">ISD</field>
             <field name="sequence">16</field>
             <field name="l10n_ec_xml_fe_code">6</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record id="tax_group_third_amounts" model="account.tax.group">
             <field name="name">Third's Amounts</field>
             <field name="sequence">17</field>
+            <field name="country_id" ref="base.ec" />
         </record>
         <record model="account.tax.template" id="tax_411_iva">
             <field name="chart_template_id" ref="l10n_ec_niif.ec_chart_template" />

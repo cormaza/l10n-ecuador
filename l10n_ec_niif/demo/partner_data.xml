@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-        <function model="account.chart.template" name="try_loading">
-            <value eval="[ref('l10n_ec_niif.ec_chart_template')]" />
-        </function>
-        <record model="res.company" id="base.main_company">
-            <field name="country_id" ref="base.ec" />
-        </record>
         <record model="res.partner" id="partner_ced">
             <field name="name">Persona con Cedula</field>
             <field
@@ -16,6 +10,7 @@
             <field name="company_type">person</field>
             <field name="vat">0915068258</field>
             <field name="country_id" ref="base.ec" />
+            <field name="company_id" ref="demo_company_ec" />
         </record>
         <record model="res.partner" id="partner_ruc">
             <field name="name">Empresa con Ruc</field>
@@ -23,6 +18,7 @@
             <field name="company_type">company</field>
             <field name="vat">0915068258001</field>
             <field name="country_id" ref="base.ec" />
+            <field name="company_id" ref="demo_company_ec" />
         </record>
         <record model="res.partner" id="partner_person_passport">
             <field name="name">Persona con Pasaporte</field>
@@ -33,6 +29,7 @@
             <field name="l10n_ec_foreign_type">01</field>
             <field name="vat">ABC123456</field>
             <field name="company_type">person</field>
+            <field name="company_id" ref="demo_company_ec" />
         </record>
         <record model="res.partner" id="partner_enterprise_passport">
             <field name="name">Empresa con Pasaporte</field>
@@ -43,12 +40,14 @@
             <field name="l10n_ec_foreign_type">02</field>
             <field name="vat">DEF123456</field>
             <field name="company_type">company</field>
+            <field name="company_id" ref="demo_company_ec" />
         </record>
         <record model="res.partner" id="partner_foreign">
             <field name="name">Empresa Extranjera</field>
             <field name="vat">DEF123457</field>
             <field name="company_type">company</field>
             <field name="country_id" ref="base.us" />
+            <field name="company_id" ref="demo_company_ec" />
         </record>
 
 </odoo>

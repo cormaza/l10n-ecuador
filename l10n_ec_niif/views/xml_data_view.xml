@@ -139,28 +139,28 @@
                                         name="invoice_out_id"
                                         attrs="{'invisible': [('invoice_out_id', '=', False)]}"
                                         domain="[('l10n_latam_internal_type','=', 'invoice'),('move_type','=','out_invoice'),('state', '=', 'posted')]"
-                                        context="{'form_view_ref':'account.view_move_form', 'type':'out_invoice', 'journal_type': 'sale'}"
+                                        context="{'form_view_ref':'account.view_move_form', 'move_type':'out_invoice', 'journal_type': 'sale'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
                                         name="credit_note_out_id"
                                         attrs="{'invisible': [('credit_note_out_id', '=', False)]}"
                                         domain="[('move_type','=','out_refund'), ('state', '=', 'posted')]"
-                                        context="{'form_view_ref':'account.view_move_form', 'type':'out_refund', 'journal_type':'sale_refund'}"
+                                        context="{'form_view_ref':'account.view_move_form', 'move_type':'out_refund', 'journal_type':'sale_refund'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
                                         name="debit_note_out_id"
                                         attrs="{'invisible': [('debit_note_out_id', '=', False)]}"
                                         domain="[('l10n_latam_internal_type','=', 'debit_note'),('move_type','=','out_invoice'), ('state', '=', 'posted')]"
-                                        context="{'form_view_ref':'account.view_move_form', 'type':'out_invoice', 'journal_type': 'sale', 'internal_type': 'debit_note'}"
+                                        context="{'form_view_ref':'account.view_move_form', 'move_type':'out_invoice', 'journal_type': 'sale', 'internal_type': 'debit_note'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
                                         name="liquidation_id"
                                         attrs="{'invisible': [('liquidation_id', '=', False)]}"
                                         domain="[('l10n_latam_internal_type','=', 'liquidation'), ('move_type','=','in_invoice'), ('state', '=', 'posted')]"
-                                        context="{'form_view_ref':'account.view_move_form', 'type':'in_invoice', 'journal_type': 'purchase','internal_type': 'liquidation'}"
+                                        context="{'form_view_ref':'account.view_move_form', 'move_type':'in_invoice', 'journal_type': 'purchase','internal_type': 'liquidation'}"
                                         options="{'no_create': True}"
                                     />
                                     <field
