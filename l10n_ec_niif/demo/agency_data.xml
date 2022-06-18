@@ -22,7 +22,7 @@
         </record>
         <record model="l10n_ec.agency" id="demo_agency">
             <field name="name">Demo Agency</field>
-            <field name="number">501</field>
+            <field name="number">502</field>
             <field name="address_id" ref="partner_demo_company_ec" />
             <field name="company_id" ref="demo_company_ec" />
             <field
@@ -59,7 +59,7 @@
         </record>
         <record model="l10n_ec.agency" id="demo_agency2">
             <field name="name">Demo Agency 2</field>
-            <field name="number">502</field>
+            <field name="number">503</field>
             <field name="address_id" ref="partner_demo_company_ec" />
             <field name="company_id" ref="demo_company_ec" />
             <field
