@@ -23,8 +23,8 @@
         <record model="l10n_ec.agency" id="demo_agency">
             <field name="name">Demo Agency</field>
             <field name="number">501</field>
-            <field name="address_id" ref="base.main_partner" />
-            <field name="company_id" ref="base.main_company" />
+            <field name="address_id" ref="partner_demo_company_ec" />
+            <field name="company_id" ref="demo_company_ec" />
             <field
             name="user_ids"
             eval="[(6, 0, [ref('base.default_user'), ref('base.user_admin'), ref('base.user_root')])]"
@@ -60,8 +60,8 @@
         <record model="l10n_ec.agency" id="demo_agency2">
             <field name="name">Demo Agency 2</field>
             <field name="number">502</field>
-            <field name="address_id" ref="base.main_partner" />
-            <field name="company_id" ref="base.main_company" />
+            <field name="address_id" ref="partner_demo_company_ec" />
+            <field name="company_id" ref="demo_company_ec" />
             <field
             name="user_ids"
             eval="[(6, 0, [ref('base.default_user'), ref('base.user_admin'), ref('base.user_root')])]"
@@ -86,7 +86,7 @@
             <field name="type_emission">pre_printed</field>
         </record>
         <record model="l10n_ec.sri.authorization" id="demo_preprinted_authorization">
-            <field name="company_id" ref="base.main_company" />
+            <field name="company_id" ref="demo_company_ec" />
             <field name="number">9999999999</field>
             <field
             name="start_date"
