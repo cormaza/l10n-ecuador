@@ -133,16 +133,39 @@ class AccountChartTemplate(models.Model):
                 and ref("l10n_ec_niif.ec_dt_18").id
                 or False
             )
+            point_of_emission_electronic = (
+                ref("l10n_ec_niif.demo_point_of_emission_electronic", False)
+                and ref("l10n_ec_niif.demo_point_of_emission_electronic").id
+                or False
+            )
             data[f"{cid}_demo_invoice_1"]["l10n_latam_document_type_id"] = document_type
+            data[f"{cid}_demo_invoice_1"][
+                "l10n_ec_point_of_emission_id"
+            ] = point_of_emission_electronic
             data[f"{cid}_demo_invoice_2"]["l10n_latam_document_type_id"] = document_type
+            data[f"{cid}_demo_invoice_2"][
+                "l10n_ec_point_of_emission_id"
+            ] = point_of_emission_electronic
             data[f"{cid}_demo_invoice_3"]["l10n_latam_document_type_id"] = document_type
+            data[f"{cid}_demo_invoice_3"][
+                "l10n_ec_point_of_emission_id"
+            ] = point_of_emission_electronic
             data[f"{cid}_demo_invoice_followup"][
                 "l10n_latam_document_type_id"
             ] = document_type
+            data[f"{cid}_demo_invoice_followup"][
+                "l10n_ec_point_of_emission_id"
+            ] = point_of_emission_electronic
             data[f"{cid}_demo_invoice_5"][
                 "l10n_latam_document_number"
-            ] = "001-001-00001"
+            ] = "001-001-000000001"
+            data[f"{cid}_demo_invoice_5"][
+                "l10n_ec_point_of_emission_id"
+            ] = point_of_emission_electronic
             data[f"{cid}_demo_invoice_equipment_purchase"][
                 "l10n_latam_document_number"
-            ] = "001-001-00002"
+            ] = "001-001-000000002"
+            data[f"{cid}_demo_invoice_equipment_purchase"][
+                "l10n_ec_point_of_emission_id"
+            ] = point_of_emission_electronic
         return model, data
