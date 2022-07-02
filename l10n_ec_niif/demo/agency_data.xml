@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+    <record id="partner_demo_company_ec" model="res.partner">
+        <field name="name">EC Company</field>
+        <field name="vat">0915068258001</field>
+        <field name="street">A</field>
+        <field name="city">Guayaquil</field>
+        <field name="country_id" ref="base.ec" />
+
+        <field name="zip">170112</field>
+        <field name="phone">+593 99 123 4567</field>
+        <field name="email">info@company.ecexample.com</field>
+        <field name="website">www.ecexample.com</field>
+    </record>
+
+    <record id="demo_company_ec" model="res.company">
+        <field name="name">EC Company</field>
+        <field name="partner_id" ref="partner_demo_company_ec" />
+    </record>
+
+    <function model="res.company" name="_onchange_country_id">
+        <value eval="[ref('demo_company_ec')]" />
+    </function>
+
 
         <record model="l10n_ec.agency" id="demo_other_agency">
             <field name="name">Other Demo Agency</field>

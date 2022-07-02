@@ -79,9 +79,9 @@
         "views/res_config_view.xml",
     ],
     "demo": [
-        "demo/demo_company.xml",
         "demo/agency_data.xml",
         "demo/partner_data.xml",
+        "demo/demo_company.xml",
     ],
     "assets": {
         "web.report_assets_common": [

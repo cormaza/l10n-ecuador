@@ -3658,6 +3658,67 @@ class AccountMove(models.Model):
                         decimales=currency.decimal_places,
                     )
 
+    def _get_l10n_ec_internal_type(self):
+        self.ensure_one()
+        internal_type = self.env.context.get("internal_type", "invoice")
+        if self.move_type in ("out_refund", "in_refund"):
+            internal_type = "credit_note"
+        if self.debit_origin_id:
+            internal_type = "debit_note"
+        return internal_type
+
+    def _get_ec_formatted_sequence(self, number=0):
+        return "%s %s-%s-%09d" % (
+            self.l10n_latam_document_type_id.doc_code_prefix,
+            self.l10n_ec_point_of_emission_id.agency_id.number,
+            self.l10n_ec_point_of_emission_id.number,
+            number,
+        )
+
+    def _get_starting_sequence(self):
+        """If use documents then will create a new starting sequence using the document type code prefix and the
+        journal document number with a 8 padding number"""
+        if (
+            self.journal_id.l10n_latam_use_documents
+            and self.company_id.country_id.code == "EC"
+        ):
+            if self.l10n_latam_document_type_id:
+                return self._get_ec_formatted_sequence()
+        return super()._get_starting_sequence()
+
+    def _get_last_sequence_domain(self, relaxed=False):
+        l10n_latam_document_type_model = self.env["l10n_latam.document.type"]
+        where_string, param = super(AccountMove, self)._get_last_sequence_domain(
+            relaxed
+        )
+        if (
+            self.country_code == "EC"
+            and self.l10n_latam_use_documents
+            and self.move_type
+            in (
+                "out_invoice",
+                "out_refund",
+                "in_invoice",
+                "in_refund",
+            )
+        ):
+            where_string, param = super(AccountMove, self)._get_last_sequence_domain(
+                False
+            )
+            internal_type = self._get_l10n_ec_internal_type()
+            document_types = l10n_latam_document_type_model.search(
+                [
+                    ("internal_type", "=", internal_type),
+                    ("country_id.code", "=", "EC"),
+                ]
+            )
+            if document_types:
+                where_string += """
+                AND l10n_latam_document_type_id in %(l10n_latam_document_type_id)s
+                """
+                param["l10n_latam_document_type_id"] = tuple(document_types.ids)
+        return where_string, param
+
 
 class AccountMoveLine(models.Model):
     _inherit = ["account.move.line", "l10n_ec.common.document.line"]
