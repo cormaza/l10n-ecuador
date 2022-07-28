@@ -8,6 +8,7 @@
     "depends": [
         "base",
         "account",
+        "account_edi",
         "base_iban",
         "base_vat",
         "l10n_latam_base",
@@ -15,6 +16,8 @@
         "account_debit_note",
         "portal",
         "mail",
+        "account_invoice_refund_link",
+        "account_fiscal_position_vat_check",
     ],
     "data": [
         "security/ir.model.access.csv",
