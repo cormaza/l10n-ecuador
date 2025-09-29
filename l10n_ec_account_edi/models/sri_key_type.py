@@ -5,7 +5,6 @@ from random import randrange
 from tempfile import NamedTemporaryFile
 
 import xmlsig  # pylint: disable=W7936
-from cryptography.hazmat.primitives import serialization  # pylint: disable=W7936
 from cryptography.hazmat.primitives.serialization import pkcs12  # pylint: disable=W7936
 from cryptography.x509 import ExtensionNotFound  # pylint: disable=W7936
 from cryptography.x509.oid import ExtensionOID, NameOID  # pylint: disable=W7936
@@ -81,7 +80,9 @@ class SriKeyType(models.Model):
             return None, None, None
         file_content = b64decode(self.file_content)
         try:
-            p12 = pkcs12.load_pkcs12(file_content, self.password.encode())
+            private_key, p12, dummy = pkcs12.load_key_and_certificates(
+                file_content, self.password.encode()
+            )
         except Exception as ex:
             _logger.warning(tools.ustr(ex))
             raise UserError(
@@ -91,11 +92,11 @@ class SriKeyType(models.Model):
                 )
                 % (tools.ustr(ex))
             ) from None
-        certificate = p12.cert.certificate
         # revisar si el certificado tiene la extension digital_signature activada
         # caso contrario tomar del listado de certificados el primero que tengan esta
         # extension
         is_digital_signature = True
+        certificate = p12
         try:
             extension = certificate.extensions.get_extension_for_oid(
                 ExtensionOID.KEY_USAGE
@@ -117,22 +118,6 @@ class SriKeyType(models.Model):
                 if extension.value.digital_signature:
                     certificate = other_cert.certificate
                     break
-        private_key_str = convert_key_cer_to_pem(file_content, self.password)
-        start_index = private_key_str.find("Signing Key")
-        # cuando el archivo tiene mas de una firma electronica
-        # viene varias secciones con BEGIN ENCRYPTED PRIVATE KEY
-        # diferenciandose por:
-        # * Decryption Key
-        # * Signing Key
-        # asi que tomar desde Signing Key en caso de existir
-        if start_index >= 0:
-            private_key_str = private_key_str[start_index:]
-        start_index = private_key_str.find("-----BEGIN ENCRYPTED PRIVATE KEY-----")
-        private_key_str = private_key_str[start_index:]
-        private_key = serialization.load_pem_private_key(
-            private_key_str.encode(),
-            self.password.encode(),
-        )
         return private_key, certificate
 
     def action_validate_and_load(self):
