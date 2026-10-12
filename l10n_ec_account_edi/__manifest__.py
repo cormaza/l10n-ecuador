@@ -6,13 +6,19 @@
     "Carlos Lopez, Renan Nazate, Yazber Romero, Luis Romero, Jorge Quiguango",
     "website": "https://github.com/OCA/l10n-ecuador",
     "license": "AGPL-3",
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.0.0",
     "depends": ["account", "account_edi", "l10n_ec", "l10n_ec_base"],
     "external_dependencies": {
         "python": [
-            "cryptography",
+            # Floor >=42: sri.key.type._l10n_ec_cert_date relies on the aware
+            # not_valid_before_utc/not_valid_after_utc attributes (naive ones
+            # deprecated since 42).
+            "cryptography>=42",
+            # Floor for the xmlsig API surface used in action_sign.
             "xmlsig>=0.1.9",
+            # Keep pinned: 1-arg XAdESContext(...) not verified on 1.0.0.
             "xades==0.2.4",
+            # Kept unpinned: no tested == version known, do not invent one.
             "zeep",
         ]
     },
