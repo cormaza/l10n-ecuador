@@ -161,6 +161,16 @@ class SriKeyType(models.Model):
             return randrange(100000, 999999)
 
         p12 = self._decode_certificate()
+        expire_date = self._l10n_ec_cert_date(p12[1], "not_valid_after")
+        if expire_date < fields.Date.context_today(self):
+            raise UserError(
+                self.env._(
+                    "The electronic signature expired on %(expire_date)s and the "
+                    "document cannot be signed. Upload a valid signature file in "
+                    "Accounting Settings / SRI key type.",
+                    expire_date=expire_date,
+                )
+            )
         doc = etree.fromstring(xml_string_data)
         signature_id = f"Signature{new_range()}"
         signature_property_id = f"{signature_id}-SignedPropertiesID{new_range()}"

@@ -6,6 +6,7 @@ from zeep import Client
 from zeep.transports import Transport
 
 from odoo import api, models
+from odoo.exceptions import UserError
 from odoo.tools import float_compare, formatLang
 
 _logger = logging.getLogger(__name__)
@@ -295,6 +296,11 @@ class AccountEdiFormat(models.Model):
                             sri_res
                         )
                         errors.extend(msj)
+            except UserError as ex:
+                # e.g. expired electronic signature: surface the actionable
+                # message as-is instead of the generic wrapper below.
+                _logger.error("%s", traceback.format_exc())
+                errors.append(str(ex))
             except Exception as ex:
                 _logger.error("%s", traceback.format_exc())
                 errors.append(
