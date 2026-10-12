@@ -14,6 +14,14 @@
             # not_valid_before_utc/not_valid_after_utc attributes (naive ones
             # deprecated since 42).
             "cryptography>=42",
+            # Coupled floor: cryptography>=42 pulls 42+ (CI installs 50.x)
+            # while images still ship pyOpenSSL 21, whose
+            # OpenSSL/crypto.py reads _lib.GEN_EMAIL, an attribute removed
+            # from cryptography 42+. Without this floor the server cannot
+            # even load base/web. Odoo itself pairs them the same way
+            # (requirements.txt: cryptography==42.0.8 with
+            # pyopenssl==24.1.0 on py>=3.12).
+            "pyopenssl>=24.1.0",
             # Floor for the xmlsig API surface used in action_sign.
             "xmlsig>=0.1.9",
             # Keep pinned: 1-arg XAdESContext(...) not verified on 1.0.0.
