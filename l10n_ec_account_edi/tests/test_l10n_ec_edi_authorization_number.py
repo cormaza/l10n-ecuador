@@ -47,40 +47,55 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         }
 
     @patch_service_sri
-    def test_l10n_ec_authorization_number_stored_on_edi_document(self):
-        """Authorization number is persisted on the EDI document"""
+    def test_l10n_ec_access_key_updated_from_sri_numero_autorizacion(self):
+        """A differing numeroAutorizacion is persisted into the access-key field"""
         self._setup_edi_company_ec()
         invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
         edi_doc = invoice._get_edi_document(self.edi_format)
+        self.assertNotEqual(edi_doc.l10n_ec_xml_access_key, DUMMY_AUTHORIZATION_NUMBER)
         edi_doc._process_documents_web_services(with_commit=False)
         self.assertEqual(edi_doc.state, "sent")
         self.assertEqual(
             auth_sri_response.autorizaciones.autorizacion[0].numeroAutorizacion,
             DUMMY_AUTHORIZATION_NUMBER,
         )
-        self.assertEqual(
-            edi_doc.l10n_ec_authorization_number, DUMMY_AUTHORIZATION_NUMBER
-        )
+        self.assertEqual(edi_doc.l10n_ec_xml_access_key, DUMMY_AUTHORIZATION_NUMBER)
 
     @patch_service_sri
-    def test_l10n_ec_authorization_number_mirrored_on_move(self):
-        """Authorization number is mirrored on the account move"""
+    def test_l10n_ec_access_key_mirrored_on_move(self):
+        """Access key is mirrored on the account move"""
         self._setup_edi_company_ec()
         invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
         edi_doc = invoice._get_edi_document(self.edi_format)
         edi_doc._process_documents_web_services(with_commit=False)
-        self.assertTrue(edi_doc.l10n_ec_authorization_number)
+        self.assertTrue(edi_doc.l10n_ec_xml_access_key)
         self.assertEqual(
-            invoice.l10n_ec_authorization_number,
-            edi_doc.l10n_ec_authorization_number,
-        )
-        self.assertEqual(
-            invoice.l10n_ec_authorization_number, DUMMY_AUTHORIZATION_NUMBER
+            invoice.l10n_ec_xml_access_key,
+            edi_doc.l10n_ec_xml_access_key,
         )
 
-    @patch_service_sri
-    def test_l10n_ec_authorization_number_not_stored_when_not_authorized(self):
-        """A non authorized response does not store the authorization number"""
+    def test_l10n_ec_access_key_kept_when_numero_autorizacion_matches(self):
+        """A matching numeroAutorizacion keeps the generated access key"""
+
+        def mock_edi_send_xml_auth_matching(edi_doc_instance, client_ws):
+            return self._response_with_auth(edi_doc_instance)
+
+        self._setup_edi_company_ec()
+        invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
+        edi_doc = invoice._get_edi_document(self.edi_format)
+        access_key_before = edi_doc.l10n_ec_xml_access_key
+        with patch.object(
+            AccountEdiDocument,
+            "_l10n_ec_edi_send_xml_auth",
+            mock_edi_send_xml_auth_matching,
+        ):
+            edi_doc._process_documents_web_services(with_commit=False)
+        self.assertEqual(edi_doc.state, "sent")
+        self.assertTrue(edi_doc.l10n_ec_authorization_date)
+        self.assertEqual(edi_doc.l10n_ec_xml_access_key, access_key_before)
+
+    def test_l10n_ec_access_key_kept_when_not_authorized(self):
+        """A non authorized response keeps the generated access key"""
 
         def mock_edi_send_xml_auth_rejected(edi_doc_instance, client_ws):
             # numeroAutorizacion is deliberately kept to prove the value is
@@ -90,6 +105,7 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         self._setup_edi_company_ec()
         invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
         edi_doc = invoice._get_edi_document(self.edi_format)
+        access_key_before = edi_doc.l10n_ec_xml_access_key
         with patch.object(
             AccountEdiDocument,
             "_l10n_ec_edi_send_xml_auth",
@@ -98,11 +114,10 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
             edi_doc._process_documents_web_services(with_commit=False)
         self.assertNotEqual(edi_doc.state, "sent")
         self.assertFalse(edi_doc.l10n_ec_authorization_date)
-        self.assertFalse(edi_doc.l10n_ec_authorization_number)
+        self.assertEqual(edi_doc.l10n_ec_xml_access_key, access_key_before)
 
-    @patch_service_sri
-    def test_l10n_ec_authorization_number_missing_in_response(self):
-        """An authorized response without numeroAutorizacion stores False"""
+    def test_l10n_ec_access_key_kept_when_numero_missing_in_response(self):
+        """An authorized response without numeroAutorizacion keeps the key"""
 
         def mock_edi_send_xml_auth_without_number(edi_doc_instance, client_ws):
             return self._response_with_auth(edi_doc_instance, with_number=False)
@@ -110,6 +125,7 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         self._setup_edi_company_ec()
         invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
         edi_doc = invoice._get_edi_document(self.edi_format)
+        access_key_before = edi_doc.l10n_ec_xml_access_key
         with patch.object(
             AccountEdiDocument,
             "_l10n_ec_edi_send_xml_auth",
@@ -119,4 +135,4 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         # the document was authorized, only the number was absent
         self.assertEqual(edi_doc.state, "sent")
         self.assertTrue(edi_doc.l10n_ec_authorization_date)
-        self.assertFalse(edi_doc.l10n_ec_authorization_number)
+        self.assertEqual(edi_doc.l10n_ec_xml_access_key, access_key_before)
