@@ -63,6 +63,18 @@ Features
    invoices comply with the current legal standards. This helps in
    identifying and rectifying issues proactively.
 
+Known issues
+------------
+
+- The SRI authorization response field ``numeroAutorizacion`` normally
+  equals the generated *clave de acceso*, so the module reuses the
+  single ``l10n_ec_xml_access_key`` field instead of keeping a separate
+  ``l10n_ec_authorization_number`` field. The SRI value is only
+  persisted when it differs from the generated key (e.g. contingency).
+  If a contingency flow ever returns a divergent authorization number,
+  it overwrites the access key and that divergence is kept as a
+  documented limitation.
+
 **Table of contents**
 
 .. contents::
