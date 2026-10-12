@@ -74,6 +74,7 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
             edi_doc.l10n_ec_xml_access_key,
         )
 
+    @patch_service_sri
     def test_l10n_ec_access_key_kept_when_numero_autorizacion_matches(self):
         """A matching numeroAutorizacion keeps the generated access key"""
 
@@ -83,6 +84,9 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         self._setup_edi_company_ec()
         invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
         edi_doc = invoice._get_edi_document(self.edi_format)
+        # The key is generated during rendering: capture it only after the
+        # first render, beforehand it reads False.
+        edi_doc._l10n_ec_render_xml_edi()
         access_key_before = edi_doc.l10n_ec_xml_access_key
         with patch.object(
             AccountEdiDocument,
@@ -94,6 +98,7 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         self.assertTrue(edi_doc.l10n_ec_authorization_date)
         self.assertEqual(edi_doc.l10n_ec_xml_access_key, access_key_before)
 
+    @patch_service_sri
     def test_l10n_ec_access_key_kept_when_not_authorized(self):
         """A non authorized response keeps the generated access key"""
 
@@ -105,6 +110,9 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         self._setup_edi_company_ec()
         invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
         edi_doc = invoice._get_edi_document(self.edi_format)
+        # The key is generated during rendering: capture it only after the
+        # first render, beforehand it reads False.
+        edi_doc._l10n_ec_render_xml_edi()
         access_key_before = edi_doc.l10n_ec_xml_access_key
         with patch.object(
             AccountEdiDocument,
@@ -116,6 +124,7 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         self.assertFalse(edi_doc.l10n_ec_authorization_date)
         self.assertEqual(edi_doc.l10n_ec_xml_access_key, access_key_before)
 
+    @patch_service_sri
     def test_l10n_ec_access_key_kept_when_numero_missing_in_response(self):
         """An authorized response without numeroAutorizacion keeps the key"""
 
@@ -125,6 +134,9 @@ class TestL10nEdiAuthorizationNumber(TestL10nECEdiCommon):
         self._setup_edi_company_ec()
         invoice = self._l10n_ec_prepare_edi_out_invoice(auto_post=True)
         edi_doc = invoice._get_edi_document(self.edi_format)
+        # The key is generated during rendering: capture it only after the
+        # first render, beforehand it reads False.
+        edi_doc._l10n_ec_render_xml_edi()
         access_key_before = edi_doc.l10n_ec_xml_access_key
         with patch.object(
             AccountEdiDocument,
