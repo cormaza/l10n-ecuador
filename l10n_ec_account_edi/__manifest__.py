@@ -22,6 +22,12 @@
             # (requirements.txt: cryptography==42.0.8 with
             # pyopenssl==24.1.0 on py>=3.12).
             "pyopenssl>=24.1.0",
+            # Coupled floor: odoo/addons/base/models/ir_mail_server.py imports
+            # urllib3.contrib.pyopenssl, whose 1.26.x line imports
+            # cryptography.hazmat.backends.openssl.x509._Certificate, a
+            # namespace removed in cryptography 50 (CI installs 50.0.2).
+            # Odoo itself pairs urllib3==2.0.7 with that modern stack.
+            "urllib3>=2.0.7",
             # Floor for the xmlsig API surface used in action_sign.
             "xmlsig>=0.1.9",
             # Keep pinned: 1-arg XAdESContext(...) not verified on 1.0.0.
