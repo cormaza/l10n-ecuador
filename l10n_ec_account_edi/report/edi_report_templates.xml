@@ -229,7 +229,7 @@
                     <td>
                         <span t-out="payment_line['name']" />
                     </td>
-                    <td class="text-right amount-xl">
+                    <td class="text-end amount-xl">
                         <span t-out="payment_line['total']" />
                     </td>
                     <td>
@@ -254,7 +254,7 @@
         </table>
     </template>
     <template id="electronic_report_page_footer">
-        <div class="footer text-right" style="font-size:8px" t-if="not hide_footer">
+        <div class="footer text-end" style="font-size:8px" t-if="not hide_footer">
             Pag.
             <span class="page" />
             /
