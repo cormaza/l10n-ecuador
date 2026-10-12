@@ -402,6 +402,19 @@ real-time validation checks to ensure that the generated electronic
 invoices comply with the current legal standards. This helps in
 identifying and rectifying issues proactively.</li>
 </ol>
+</div>
+<div class="section" id="known-issues">
+<h2>Known issues</h2>
+<ul class="simple">
+<li>The SRI authorization response field <tt class="docutils literal">numeroAutorizacion</tt> normally
+equals the generated <em>clave de acceso</em>, so the module reuses the
+single <tt class="docutils literal">l10n_ec_xml_access_key</tt> field instead of keeping a separate
+<tt class="docutils literal">l10n_ec_authorization_number</tt> field. The SRI value is only
+persisted when it differs from the generated key (e.g. contingency).
+If a contingency flow ever returns a divergent authorization number,
+it overwrites the access key and that divergence is kept as a
+documented limitation.</li>
+</ul>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -418,6 +431,15 @@ Resolution NAC-DGERCGC26-00000027</p>
 <ul class="simple">
 <li>Go to <tt class="docutils literal">Invoicing &gt; Configuration &gt; Settings</tt>.</li>
 <li>In the <tt class="docutils literal">Ecuadorian Localization</tt> section, set the <tt class="docutils literal">RUC Provider</tt>.</li>
+</ul>
+<p>The SRI authorization number returned by the web service is stored
+automatically on each authorized electronic document, next to the
+authorization date. No manual configuration is needed</p>
+<ul class="simple">
+<li>Go to
+<tt class="docutils literal">Invoicing &gt; Configuration &gt; Ecuadorian SRI &gt; XML Electronic Documents</tt>.</li>
+<li>Check the <tt class="docutils literal">Authorization Number(EC)</tt> column of the list, or open a
+document to see it in the form.</li>
 </ul>
 </div>
 <div class="section" id="usage">

@@ -655,9 +655,20 @@ class AccountEdiDocument(models.Model):
                 self.l10n_ec_xml_access_key,
                 l10n_ec_authorization_date,
             )
-            self.write(
-                {"l10n_ec_authorization_date": l10n_ec_authorization_date.strftime(DTF)}
-            )
+            auth_values = {
+                "l10n_ec_authorization_date": l10n_ec_authorization_date.strftime(DTF),
+            }
+            # numeroAutorizacion normally equals the generated clave de acceso,
+            # so the single access-key field is reused; only overwrite it when
+            # SRI returns a different value (e.g. contingency), otherwise keep
+            # the generated clave.
+            numero_autorizacion = doc.get("numeroAutorizacion")
+            if (
+                numero_autorizacion
+                and numero_autorizacion != self.l10n_ec_xml_access_key
+            ):
+                auth_values["l10n_ec_xml_access_key"] = numero_autorizacion
+            self.write(auth_values)
             break
         return is_auth, msj_list
 
